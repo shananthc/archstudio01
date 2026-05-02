@@ -1,0 +1,817 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Architectural Visualization</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #F8F6F1;
+    --stone: #E8E4DC;
+    --warm-gray: #C4BDB3;
+    --mid: #8C8580;
+    --dark: #2A2825;
+    --accent: #BFA98A;
+    --white: #FDFCFA;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 2rem 4rem;
+    z-index: 100;
+    mix-blend-mode: multiply;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dark);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--dark);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .nav-links a:hover { color: var(--dark); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 8rem 4rem 6rem;
+    position: relative; z-index: 2;
+  }
+  .hero-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.9s 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  .hero-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-tagline {
+    font-size: 0.88rem;
+    color: var(--mid);
+    line-height: 1.8;
+    max-width: 340px;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s 0.7s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  .hero-cta {
+    display: flex; align-items: center; gap: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  .btn-primary {
+    display: inline-block;
+    padding: 0.85rem 2.2rem;
+    background: var(--dark);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--accent);
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-scroll {
+    font-size: 0.75rem;
+    color: var(--mid);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.6rem;
+    transition: color 0.3s;
+  }
+  .btn-scroll:hover { color: var(--dark); }
+  .btn-scroll svg { transition: transform 0.3s ease; }
+  .btn-scroll:hover svg { transform: translateY(4px); }
+
+  .hero-right {
+    position: relative; overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1.2s 0.4s ease forwards;
+  }
+  .hero-img-wrap {
+    position: absolute; inset: 0;
+    overflow: hidden;
+  }
+  .hero-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scale(1.08);
+    animation: zoomOut 1.8s 0.2s ease forwards;
+    filter: saturate(0.7) contrast(1.05);
+  }
+  .hero-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, var(--cream) 0%, transparent 20%);
+  }
+  .hero-stats {
+    position: absolute; bottom: 4rem; left: 3rem;
+    display: flex; gap: 3rem;
+    z-index: 3;
+  }
+  .stat {
+    opacity: 0;
+    animation: fadeUp 0.8s 1.1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  }
+  .stat:nth-child(2) { animation-delay: 1.25s; }
+  .stat:nth-child(3) { animation-delay: 1.4s; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--white);
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-top: 0.3rem;
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    border-top: 1px solid var(--stone);
+    border-bottom: 1px solid var(--stone);
+    padding: 1.2rem 0;
+    overflow: hidden;
+    background: var(--white);
+  }
+  .marquee-track {
+    display: flex; gap: 4rem;
+    animation: marquee 18s linear infinite;
+    width: max-content;
+  }
+  .marquee-item {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    white-space: nowrap;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .marquee-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ABOUT */
+  .about {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 0;
+    padding: 8rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .about-left { padding-right: 6rem; }
+  .section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before {
+    content: '';
+    display: block; width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .about-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+  }
+  .about-heading em { font-style: italic; color: var(--accent); }
+  .about-right { display: flex; flex-direction: column; justify-content: center; }
+  .about-text {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: #555;
+    margin-bottom: 1.5rem;
+  }
+  .about-text strong { color: var(--dark); font-weight: 500; }
+  .expertise-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--stone);
+  }
+  .expertise-item {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--stone);
+    border-right: 1px solid var(--stone);
+    padding-right: 2rem;
+  }
+  .expertise-item:nth-child(even) { padding-left: 2rem; border-right: none; }
+  .expertise-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .expertise-title {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--dark);
+    letter-spacing: 0.04em;
+  }
+
+  /* PROJECTS */
+  .projects {
+    padding: 6rem 4rem;
+    background: var(--dark);
+    color: var(--cream);
+  }
+  .projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    max-width: 1400px; margin-left: auto; margin-right: auto;
+    margin-bottom: 4rem;
+  }
+  .projects-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+  }
+  .projects-heading em { font-style: italic; color: var(--accent); }
+  .view-all {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.6rem;
+    transition: color 0.3s;
+    white-space: nowrap;
+    align-self: flex-end; margin-bottom: 0.5rem;
+  }
+  .view-all:hover { color: var(--accent); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 6fr 4fr;
+    grid-template-rows: auto auto;
+    gap: 1.5px;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .project-card {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: unset;
+    cursor: pointer;
+    background: #1a1815;
+  }
+  .project-card:first-child {
+    grid-row: 1 / 3;
+    aspect-ratio: unset;
+  }
+  .project-card:nth-child(2),
+  .project-card:nth-child(3) { aspect-ratio: 4/3; }
+  .project-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
+    filter: saturate(1) brightness(1);
+  }
+  .project-card:hover .project-img {
+    transform: scale(1.06);
+    filter: saturate(1) brightness(0.9);
+  }
+  .project-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(20,18,16,0.9) 0%, rgba(20,18,16,0.1) 60%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2rem;
+  }
+  .project-cat {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .project-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+  .project-card:first-child .project-title { font-size: 2rem; }
+  .project-year {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.08em;
+  }
+  .project-arrow {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: all 0.4s ease;
+  }
+  .project-card:hover .project-arrow {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* PROCESS */
+  .process {
+    padding: 8rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .process-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6rem;
+    align-items: start;
+  }
+  .process-intro h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-top: 1rem;
+  }
+  .process-intro h2 em { font-style: italic; color: var(--accent); }
+  .process-steps { display: flex; flex-direction: column; }
+  .process-step {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--stone);
+    position: relative;
+    transition: all 0.4s ease;
+  }
+  .process-step:hover .step-content { transform: translateX(8px); }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--stone);
+    line-height: 1;
+    transition: color 0.4s;
+  }
+  .process-step:hover .step-num { color: var(--accent); }
+  .step-content { transition: transform 0.4s ease; }
+  .step-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+  }
+  .step-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--mid);
+  }
+
+  /* CONTACT */
+  .contact {
+    padding: 8rem 4rem;
+    background: var(--white);
+    border-top: 1px solid var(--stone);
+  }
+  .contact-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: block;
+  }
+  .contact-left h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin: 1rem 0 2rem;
+  }
+  .contact-left h2 em { font-style: italic; color: var(--accent); }
+  .contact-left p {
+    font-size: 0.92rem;
+    line-height: 1.8;
+    color: var(--mid);
+    max-width: 360px;
+    margin-bottom: 3rem;
+  }
+  .contact-methods { display: flex; flex-direction: column; gap: 1.5rem; }
+  .contact-method {
+    display: flex; flex-direction: column;
+    text-decoration: none; color: inherit;
+    border-bottom: 1px solid var(--stone);
+    padding-bottom: 1.5rem;
+    transition: border-color 0.3s;
+  }
+  .contact-method:hover { border-color: var(--accent); }
+  .method-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 0.4rem;
+  }
+  .method-value {
+    font-size: 1.05rem;
+    color: var(--dark);
+    transition: color 0.3s;
+  }
+  .contact-method:hover .method-value { color: var(--accent); }
+
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 4rem;
+    background: var(--dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+  .footer-copy {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.06em;
+  }
+  .footer-socials { display: flex; gap: 1.5rem; }
+  .footer-socials a {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-socials a:hover { color: var(--accent); }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* KEYFRAMES */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  @keyframes zoomOut {
+    to { transform: scale(1); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1.5rem 2rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 7rem 2rem 4rem; }
+    .hero-right { min-height: 60vw; }
+    .hero-stats { left: 1.5rem; bottom: 2rem; gap: 2rem; }
+    .about { grid-template-columns: 1fr; padding: 5rem 2rem; }
+    .about-left { padding-right: 0; margin-bottom: 3rem; }
+    .projects { padding: 5rem 2rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card:first-child { grid-row: auto; aspect-ratio: 4/3; }
+    .process { padding: 5rem 2rem; }
+    .process-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .contact { padding: 5rem 2rem; }
+    .contact-inner { display: block; }
+    footer { flex-direction: column; gap: 1rem; padding: 2rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">shananth</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">3D Visualizer & Architectural Designer</p>
+    <h1 class="hero-name">
+      Spaces that<br>
+      <em>breathe.</em>
+    </h1>
+    <p class="hero-tagline">
+      Transforming architectural concepts into photorealistic visual narratives — where precision meets artistry.
+    </p>
+    <div class="hero-cta">
+      <a href="#work" class="btn-primary"><span>View Projects</span></a>
+      <a href="#contact" class="btn-scroll">
+        Get in touch
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1v12M1 7l6 6 6-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <img src="images/hero.png" alt="Architectural visualization" />
+      <div class="hero-img-overlay"></div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">8+</div>
+        <div class="stat-label">Years experience</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">120</div>
+        <div class="stat-label">Projects delivered</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">40+</div>
+        <div class="stat-label">Global clients</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <span class="marquee-item"><span class="marquee-dot"></span> 3D Visualization</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> Architectural Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> Interior Rendering</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> Exterior CGI</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> 3D Visualization</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> Architectural Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> Interior Rendering</span>
+    <span class="marquee-item"><span class="marquee-dot"></span> Exterior CGI</span>
+
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-left">
+    <div class="section-label reveal">About</div>
+    <h2 class="about-heading reveal reveal-delay-1">
+      Crafting <em>visual reality</em><br>from raw concepts
+    </h2>
+  </div>
+  <div class="about-right">
+    <p class="about-text reveal">
+      I am <strong>shananth</strong>, a 3D visualizer and architectural designer translating architectural visions into compelling, photorealistic imagery. My work bridges the gap between design intent and built reality.
+    </p>
+    <p class="about-text reveal reveal-delay-1">
+      From luxury residences to large-scale commercial developments, I partner with architects, developers, and interior designers to communicate their projects with clarity and emotion — before a single brick is laid.
+    </p>
+    <div class="expertise-grid reveal reveal-delay-2">
+      <div class="expertise-item">
+        <div class="expertise-num">01</div>
+        <div class="expertise-title">Photorealistic Rendering</div>
+      </div>
+      <div class="expertise-item">
+        <div class="expertise-num">02</div>
+        <div class="expertise-title">Interior Visualization</div>
+      </div>
+      <div class="expertise-item">
+        <div class="expertise-num">03</div>
+        <div class="expertise-title">Exterior CGI</div>
+      </div>
+      <div class="expertise-item">
+        <div class="expertise-num">04</div>
+        <div class="expertise-title">360° Virtual Tours</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="work">
+  <div class="projects-header">
+    <h2 class="projects-heading reveal">Selected <em>work</em></h2>
+    <a href="projects.html" class="view-all reveal">View all projects →</a>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <img class="project-img" src="images/project1.png" alt="Villa Serenita" loading="lazy" />
+      <div class="project-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 12L12 2M12 2H5M12 2v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-1">
+      <img class="project-img" src="images/project2.jpg" alt="Blanc Interiors" loading="lazy" />
+      <div class="project-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 12L12 2M12 2H5M12 2v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-2">
+      <img class="project-img" src="images/project3.png" alt="Tower One" loading="lazy" />
+      <div class="project-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 12L12 2M12 2H5M12 2v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="process-inner">
+    <div class="process-intro">
+      <div class="section-label reveal">Process</div>
+      <h2 class="reveal reveal-delay-1">How I <em>work</em></h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Brief & Discovery</div>
+          <div class="step-desc">Understanding your vision, target audience, and project scope. I study your drawings, references, and brand identity to align on the final outcome.</div>
+        </div>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Concept & Composition</div>
+          <div class="step-desc">Developing camera angles, lighting moods, and material palettes. Draft renders are reviewed and refined to ensure the composition tells the right story.</div>
+        </div>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Production & Detailing</div>
+          <div class="step-desc">Full-resolution rendering with meticulous attention to light, shadow, texture, and atmosphere — every detail crafted to look real.</div>
+        </div>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Post-production & Delivery</div>
+          <div class="step-desc">Professional color grading, retouching, and final output in any format required — print, web, or presentation-ready files.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <div class="section-label reveal">Contact</div>
+      <h2 class="reveal reveal-delay-1">Let's build something <em>remarkable</em></h2>
+      <p class="reveal reveal-delay-2">Have a project in mind? I'd love to hear about it. Send a message or reach out directly.</p>
+      <div class="contact-methods reveal reveal-delay-3">
+        <a href="mailto:shananthc278@gmail.com" class="contact-method">
+          <span class="method-label">Email</span>
+          <span class="method-value">shananthc278@gmail.com</span>
+        </a>
+        <a href="tel:+971000000000" class="contact-method">
+          <span class="method-label">Phone</span>
+          <span class="method-value">(+91) 9384387944</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">shananth</div>
+  <div class="footer-copy">© 2025 · All rights reserved</div>
+  <div class="footer-socials">
+    <a href="https://www.instagram.com/arch_studio.1?igsh=bTlsZjB1cGtyMjZw" target="_blank">Instagram</a>
+    <a href="https://www.linkedin.com/in/shananth-c" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // Parallax hero image
+  const heroImg = document.querySelector('.hero-img-wrap img');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (heroImg) heroImg.style.transform = `scale(1) translateY(${y * 0.25}px)`;
+  }, { passive: true });
+
+</script>
+</body>
+</html>

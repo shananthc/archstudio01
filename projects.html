@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Projects — Shananth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #F8F6F1;
+    --stone: #E8E4DC;
+    --warm-gray: #C4BDB3;
+    --mid: #8C8580;
+    --dark: #2A2825;
+    --accent: #BFA98A;
+    --white: #FDFCFA;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 2rem 4rem;
+    z-index: 100;
+    background: rgba(42,40,37,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+  }
+  .nav-back {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.6rem;
+    transition: color 0.3s;
+  }
+  .nav-back:hover { color: var(--accent); }
+  .nav-back svg { transition: transform 0.3s ease; }
+  .nav-back:hover svg { transform: translateX(-4px); }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 10rem 4rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 4rem;
+  }
+  .page-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .page-label::before {
+    content: '';
+    display: block; width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .page-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 300;
+    line-height: 1.05;
+  }
+  .page-heading em { font-style: italic; color: var(--accent); }
+
+  /* PROJECTS GRID */
+  .projects-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 4rem 8rem;
+  }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+  }
+  .project-card {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+    background: #1a1815;
+  }
+  .project-card:first-child {
+    grid-column: 1 / 3;
+    aspect-ratio: 16/9;
+  }
+  .project-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;
+    filter: saturate(0.5) brightness(0.85);
+  }
+  .project-card:hover .project-img {
+    transform: scale(1.06);
+    filter: saturate(0.8) brightness(0.75);
+  }
+  .project-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(20,18,16,0.9) 0%, rgba(20,18,16,0.1) 60%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2rem;
+  }
+  .project-cat {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .project-arrow {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: all 0.4s ease;
+  }
+  .project-card:hover .project-arrow {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1), transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 4rem;
+    background: #1a1815;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+  .footer-copy {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.06em;
+  }
+  .footer-socials { display: flex; gap: 1.5rem; }
+  .footer-socials a {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-socials a:hover { color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1.5rem 2rem; }
+    .page-header { padding: 8rem 2rem 3rem; }
+    .projects-wrapper { padding: 0 2rem 5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card:first-child { grid-column: auto; aspect-ratio: 4/3; }
+    footer { flex-direction: column; gap: 1rem; padding: 2rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">shananth</a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M12 7H2M2 7l5-5M2 7l5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+    Back to home
+  </a>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-label reveal">Portfolio</div>
+  <h1 class="page-heading reveal reveal-delay-1">All <em>projects</em></h1>
+</div>
+
+<!-- PROJECTS GRID -->
+<div class="projects-wrapper">
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <img class="project-img" src="images/project1.png" alt="Modern Villa Exterior" loading="lazy" />
+      <div class="project-overlay">
+        <div class="project-cat">Residential · Exterior</div>
+      </div>
+      <div class="project-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 12L12 2M12 2H5M12 2v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-delay-1">
+      <img class="project-img" src="images/project2.jpg" alt="Contemporary House" loading="lazy" />
+      <div class="project-overlay">
+        <div class="project-cat">Residential · Exterior</div>
+      </div>
+      <div class="project-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 12L12 2M12 2H5M12 2v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-delay-2">
+      <img class="project-img" src="images/project3.png" alt="Interior Living Space" loading="lazy" />
+      <div class="project-overlay">
+        <div class="project-cat">Interior · Living Space</div>
+      </div>
+      <div class="project-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 12L12 2M12 2H5M12 2v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-delay-3">
+      <img class="project-img" src="images/project4.png" alt="Traditional Villa" loading="lazy" />
+      <div class="project-overlay">
+        <div class="project-cat">Residential · Exterior</div>
+      </div>
+      <div class="project-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 12L12 2M12 2H5M12 2v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="project-card reveal reveal-delay-4">
+      <img class="project-img" src="images/project5.png" alt="Classic Villa" loading="lazy" />
+      <div class="project-overlay">
+        <div class="project-cat">Residential · Classic Exterior</div>
+      </div>
+      <div class="project-arrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 12L12 2M12 2H5M12 2v7" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">shananth</div>
+  <div class="footer-copy">© 2025 · All rights reserved</div>
+  <div class="footer-socials">
+    <a href="https://www.instagram.com/arch_studio.1?igsh=bTlsZjB1cGtyMjZw" target="_blank">Instagram</a>
+    <a href="https://www.linkedin.com/in/shananth-c" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
